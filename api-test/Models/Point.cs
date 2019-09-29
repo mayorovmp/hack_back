@@ -22,9 +22,9 @@ namespace api_test.Models
         [DataMember(Name = "business_hours")]
         public string BusinessHours { get; set; }
         [DataMember(Name = "lat")]
-        public float Lat { get; set; }
+        public double Lat { get; set; }
         [DataMember(Name = "lon")]
-        public float Lon { get; set; }
+        public double Lon { get; set; }
         [DataMember(Name = "available_categories")]
         public List<Category> AvailableCategories { get; set; }
 

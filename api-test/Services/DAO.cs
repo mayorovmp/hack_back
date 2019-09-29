@@ -60,8 +60,8 @@ namespace api_test.Services
                                 Phone = reader.GetString(2).Trim(),
                                 Description = reader.GetString(3).Trim(),
                                 BusinessHours = reader.GetString(4).Trim(),
-                                Lat = 53.13f,
-                                Lon = 46.13f,
+                                Lat = reader.GetDouble(5),
+                                Lon = reader.GetDouble(6),
                                 AvailableCategories = new List<Category>()
                             });
                         }
