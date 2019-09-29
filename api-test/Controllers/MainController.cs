@@ -25,11 +25,7 @@ namespace api_test.Controllers
         public ActionResult<Main> Get()
         {
             //t();
-            return new Main()
-            {
-                Categories = _db.GetAllCategory() ,
-                Points = Point.MockPoints,
-            };
+            return _db.GetMain();
         }
         [HttpPost("filter")]
         public ActionResult<Main> Get([FromBody]List<int> filterIds)

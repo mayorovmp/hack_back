@@ -10,7 +10,7 @@ namespace api_test.Services
 {
     public class DAO
     {
-        private string connectionString = "Server=(localdb)\\mssqllocaldb;Database=testDatabase;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=(localdb)\\mssqllocaldb;Database=testDatabase;Trusted_Connection=True;";
 
         public List<Category> GetAllCategory()
         {
@@ -26,7 +26,11 @@ namespace api_test.Services
                     {
                         while (reader.Read())
                         {
-                            result.Add(new Category() { CategoryId = reader.GetInt32(0), Name = reader.GetString(1) });
+                            result.Add(new Category()
+                            {
+                                Id = reader.GetInt32(0),
+                                CategoryId = reader.GetInt32(0), Name = reader.GetString(1).Trim()
+                            });
                         }
                     }
                     connection.Close();
@@ -34,5 +38,72 @@ namespace api_test.Services
             }
             return result;
         }
+
+        public Main GetMain()
+        {
+            var points = new List<Point>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = "select * from Point";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            points.Add(new Point()
+                            {
+                                Id = reader.GetInt32(0),
+                                Address = reader.GetString(1).Trim(),
+                                Phone = reader.GetString(2).Trim(),
+                                Description = reader.GetString(3).Trim(),
+                                BusinessHours = reader.GetString(4).Trim(),
+                                Lat = 53.13f,
+                                Lon = 46.13f,
+                                AvailableCategories = new List<Category>()
+                            });
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            for (int i = 0; i < points.Count; i++) {
+                var result = new List<Category>();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string sql = "select c.* from Category c join PointCategory pc on pc.categoryId = c.Id and pc.pointId = @ID";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.Parameters.AddWithValue("@ID", points[i].Id);
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                result.Add(new Category()
+                                {
+                                    Id = reader.GetInt32(0),
+                                    CategoryId = reader.GetInt32(0),
+                                    Name = reader.GetString(1).Trim()
+                                });
+                            }
+                        }
+                        connection.Close();
+                    }
+                    points[i].AvailableCategories = result;
+                }
+            }
+
+            return new Main() {
+                Points = points,
+                Categories = GetAllCategory()
+            };
+        }
+        //public List<Category> GetCategoriesByPoint(int categoryId) {
+
+        //}
     }
 }

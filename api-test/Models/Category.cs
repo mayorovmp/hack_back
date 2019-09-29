@@ -7,6 +7,8 @@ namespace api_test.Models
     [DataContract(Name = "category")]
     public class Category
     {
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
         [DataMember(Name = "category_id")]
         public int CategoryId { get; set; }
         [DataMember(Name = "name")]

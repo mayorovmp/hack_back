@@ -26,6 +26,6 @@ namespace api_test
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
 
-                        .UseUrls("http://127.0.0.1:81");
+                        .UseUrls("http://192.168.43.116:81");
     }
 }
