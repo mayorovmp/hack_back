@@ -12,15 +12,18 @@ namespace api_test.Controllers
     [ApiController]
     public class BlogController : ControllerBase
     {
-        // GET api/main
+        //get api/blog
         [HttpGet]
-        public ActionResult<Post> Get()
+        public ActionResult<Tape> Get()
         {
-            return new Main()
-            {
-                Categories = Category.MockCategories,
-                Points = Point.MockPoints,
-            };
+            return Tape.MockTape;
+        }
+
+        //get api/blog
+        [HttpGet("{postId}")]
+        public ActionResult<PostDetail> GetDetail(int postId)
+        {
+            return PostDetail.MockPostDetail;
         }
     }
 }
